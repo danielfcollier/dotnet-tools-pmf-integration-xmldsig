@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="DotNext.IO" Version="4.7.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <Content Include=".vscode\launch.json" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.0" />
