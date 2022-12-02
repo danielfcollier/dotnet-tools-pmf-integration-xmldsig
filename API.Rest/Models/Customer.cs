@@ -2,7 +2,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Model;
+namespace Models;
 
 public class Customer
 {

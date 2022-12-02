@@ -3,7 +3,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Model;
+namespace Models;
 
 [XmlRoot("xmlProcessamentoNfpse")]
 public class InvoiceRequest
