@@ -61,7 +61,7 @@ public static class XmlDSigService
         return isValid;
     }
 
-    public static async Task<Credentials> GetCredentials()
+    public static async Task<Credentials> GetCredentials(string partnerId)
     {
         // TODO: get credentials from secure location
 
