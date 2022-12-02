@@ -37,4 +37,8 @@ public static class Consumer
             return null;
         }
     }
+
+    public static async Task Save(InvoiceResponse response)
+    {
+    }
 }
