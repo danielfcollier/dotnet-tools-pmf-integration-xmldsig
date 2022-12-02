@@ -1,10 +1,10 @@
 using System.Globalization;
 
-using Model;
+using Models;
 using CsvHelper;
 using CsvHelper.Configuration;
 
-namespace Utils;
+namespace Handlers;
 
 public static class CSVHandler
 {
