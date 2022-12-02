@@ -4,8 +4,8 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using System.Security.Cryptography.X509Certificates;
 
-using Model;
-using Utils;
+using Models;
+using Handlers;
 
 namespace Services;
 
@@ -13,7 +13,7 @@ public static class XmlDSigService
 {
     public static XmlDocument XmlDSig(XmlDocument payload, X509Certificate2 certificate)
     {
-        var result = (XmlDocument)payload.CloneNode(true);
+        XmlDocument result = (XmlDocument)payload.CloneNode(true);
 
         RSA? privateKey = certificate.GetRSAPrivateKey();
 
