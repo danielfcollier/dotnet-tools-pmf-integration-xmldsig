@@ -55,7 +55,9 @@ public static class XmlHandler
     public static string ValidateRequest(XmlDocument request, string requestNodeName)
     {
         if (request is null)
+        {
             throw new ArgumentNullException(nameof(request));
+        }
 
         string? nspace = GetRequestNamespace(request, requestNodeName);
 
@@ -70,15 +72,14 @@ public static class XmlHandler
 
     public static XmlNode? GetNode(XmlDocument doc, string tagName, string nspace)
     {
-        XmlNodeList? nodes
-            = doc?.GetElementsByTagName(tagName, nspace);
+        XmlNodeList? nodes = doc?.GetElementsByTagName(tagName, nspace);
 
         if (nodes is not null && nodes.Count > 0)
         {
             return (nodes[0]);
         }
 
-        return (null);
+        return null;
     }
 
     public static XmlNode? GetNode(XmlDocument doc, string tagName)
@@ -91,7 +92,7 @@ public static class XmlHandler
             return (nodes[0]);
         }
 
-        return (null);
+        return null;
     }
 
     private static string? GetRequestNamespace(XmlDocument request, string requestNodeName)
