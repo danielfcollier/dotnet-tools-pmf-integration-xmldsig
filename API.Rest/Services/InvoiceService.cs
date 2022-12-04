@@ -117,7 +117,7 @@ public class InvoiceService
     {
         List<InvoiceRequest.ItemServico> itensServico = new();
 
-        string jsonString = StringsHandler.DecodeBase64(customer.Services);
+        string jsonString = StringsHandler.DecodeBase64WithAccents(customer.Services);
         List<CustomerServices>? services = JsonSerializer.Deserialize<List<CustomerServices>>(jsonString);
         if (services is null)
         {

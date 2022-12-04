@@ -1,6 +1,7 @@
 using System.Buffers;
 using System.Globalization;
 using System.Text;
+using System.Web;
 
 namespace Handlers;
 
@@ -184,6 +185,15 @@ public static class StringsHandler
         }
 
         return str;
+    }
+
+    public static string DecodeBase64(string encoded)
+    {
+        byte[] data = Convert.FromBase64String(encoded);
+        string encodedUrl = Encoding.UTF8.GetString(data);
+        string decoded = HttpUtility.UrlDecode(encodedUrl, Encoding.UTF8);
+
+        return decoded;
     }
 
     public static byte[] ToByteArray(this string hex)
