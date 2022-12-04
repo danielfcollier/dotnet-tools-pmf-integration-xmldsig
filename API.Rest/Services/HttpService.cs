@@ -72,9 +72,15 @@ public static class HttpService
         HttpResponseMessage? response = await _client.SendAsync(request);
 
         string? result = await response.Content.ReadAsStringAsync();
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            return (default(T), response.StatusCode);
+        }
+
         T? output = JsonSerializer.Deserialize<T>(result);
 
-        return (output, response?.StatusCode ?? HttpStatusCode.BadRequest);
+        return (output, response.StatusCode);
     }
 
 
@@ -85,14 +91,18 @@ public static class HttpService
         object? data
     )
     {
-        string payload = JsonSerializer.Serialize(data);
-        string? contentType = GetContentType(headers);
-        StringContent content = new(payload, Encoding.UTF8, contentType);
-
         HttpRequestMessage request = new(method, uri);
-        SetAuthorizationHeader(headers, request);
-        SetHeaders(headers, request);
-        SetContent(content, request);
+        
+        if (method != HttpMethod.Get)
+        {
+            string payload = JsonSerializer.Serialize(data);
+            string? contentType = GetContentType(headers);
+            StringContent content = new(payload, Encoding.UTF8, contentType);
+
+            SetAuthorizationHeader(headers, request);
+            SetHeaders(headers, request);
+            SetContent(content, request);
+        }
 
         return request;
     }
