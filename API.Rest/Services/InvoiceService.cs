@@ -10,7 +10,7 @@ namespace Services;
 public class InvoiceService
 {
     private readonly string encryptedPassword;
-    private readonly Credentials credentials;
+    private readonly PartnerCredentials credentials;
     private OAuth2Token? oAuth2Token;
     private readonly string BASE_URL;
 

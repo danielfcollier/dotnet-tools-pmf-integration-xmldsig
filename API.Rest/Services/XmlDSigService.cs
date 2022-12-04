@@ -12,7 +12,7 @@ public class XmlDSigService
 {
     private readonly X509Certificate2 certificate;
 
-    public XmlDSigService(Credentials credentials)
+    public XmlDSigService(PartnerCredentials credentials)
     {
         certificate = GetCertificate(credentials);
     }
@@ -67,7 +67,7 @@ public class XmlDSigService
         return isValid;
     }
 
-    public X509Certificate2 GetCertificate(Credentials credentials)
+    public X509Certificate2 GetCertificate(PartnerCredentials credentials)
     {
         byte[] bytes = Convert.FromBase64String(credentials.Certificate.Data);
 

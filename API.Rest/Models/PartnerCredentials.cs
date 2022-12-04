@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Models;
 
-public class Credentials
+public class PartnerCredentials
 {
     [JsonPropertyName("certificate")]
     public CertificateSignature Certificate { get; init; }

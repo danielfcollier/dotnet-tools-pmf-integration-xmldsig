@@ -16,7 +16,7 @@ public class Partner
     public List<Service> Services { get; init; }
 
     [JsonPropertyName("secrets")]
-    public Credentials Secrets { get; init; }
+    public PartnerCredentials Secrets { get; init; }
 
     public class MunicipalData
     {
