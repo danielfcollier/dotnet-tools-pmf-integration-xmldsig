@@ -34,8 +34,6 @@ public class Credentials
 
         [JsonPropertyName("password")]
         public string Password { get; init; }
-
-        public string EncryptedPassword { get; set; }
     }
 
     public class ClientCredentials

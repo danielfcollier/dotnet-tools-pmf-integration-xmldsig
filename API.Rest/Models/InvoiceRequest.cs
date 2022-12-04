@@ -69,7 +69,7 @@ public class InvoiceRequest
     public decimal? ValorIssqnSubstituicao { get; set; }
 
     [XmlElement(ElementName = "identificacao")]
-    public string Identificacao { get; set; }
+    public string? Identificacao { get; set; }
 
     [XmlElement(ElementName = "numeroAEDF")]
     public string NumeroAedf { get; set; }

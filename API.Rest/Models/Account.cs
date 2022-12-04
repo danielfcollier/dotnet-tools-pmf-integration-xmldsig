@@ -2,11 +2,10 @@
 
 using System.Text.Json.Serialization;
 
-namespace Model;
+namespace Models;
 
 public class Account
 {
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     [JsonPropertyName("id")]
     public string Id { get; set; }
 
