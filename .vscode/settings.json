@@ -1,14 +1,20 @@
 {
   "cSpell.words": [
+    "acordo",
     "Adicionais",
     "AEDF",
     "Aliquota",
+    "Aprox",
+    "autenticacao",
     "Bairro",
     "Calculo",
+    "cancela",
+    "cancelamento",
     "Cfps",
     "CNAE",
     "codigo",
     "complemento",
+    "Consulta",
     "descricao",
     "Emissao",
     "Endereco",
@@ -18,9 +24,12 @@
     "ISSQN",
     "itens",
     "logradouro",
+    "Médica",
     "Municipio",
+    "notas",
     "numero",
     "pais",
+    "processa",
     "Processamento",
     "quantidade",
     "razao",
@@ -31,6 +40,8 @@
     "Substituicao",
     "telefone",
     "Tomador",
-    "Unitario"
+    "Trib",
+    "Unitario",
+    "valida"
   ]
 }
