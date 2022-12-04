@@ -1,8 +1,10 @@
 namespace Services;
 
-public static class CodesService
+public static class CityCodesService
 {
-    public static int GetCfps(int baseCode, int? cityCode)
+    private static readonly int BASE_CITY_CODE = 4205407; // FLORIANÓPOLIS
+
+    public static int GetCfps(int cityCode)
     {
         Dictionary<string, int> CfpsTable = new()
             {
@@ -12,17 +14,12 @@ public static class CodesService
                 { "OtherCountry", 9204 },
             };
 
-        if (cityCode is null)
-        {
-            return CfpsTable["OtherCountry"];
-        }
-
-        if (cityCode == baseCode)
+        if (cityCode == BASE_CITY_CODE)
         {
             return CfpsTable["SameCity"];
         }
 
-        string baseStateCode = $"{baseCode}";
+        string baseStateCode = $"{BASE_CITY_CODE}";
         string cityStateCode = $"{cityCode}";
 
         bool hasSameStateBase = baseStateCode.Substring(0, 2) == cityStateCode.Substring(0, 2);
@@ -33,19 +30,5 @@ public static class CodesService
         }
 
         return CfpsTable["OtherState"];
-    }
-    public static string GetCountry(int? countryCode)
-    {
-        return "Brasil";
-    }
-
-    public static string GetCity(int? cityCode)
-    {
-        return cityCode switch
-        {
-            3550308 => "São Paulo",
-            4205407 => "Florianópolis",
-            _ => String.Empty,
-        };
     }
 }
