@@ -1,10 +1,12 @@
+using System.Text.RegularExpressions;
+
 namespace Handlers;
 
 public static class UtilsHandler
 {
     public static string MaskPersonDocument(string documentId)
     {
-        string cleanDocument = documentId;
+        string cleanDocument = OnlyNumbers(documentId);
 
         return cleanDocument.PadLeft(11, '0');
     }
@@ -17,5 +19,12 @@ public static class UtilsHandler
         var day = temp[0];
 
         return $"{year}-{month}-{day}";
+    }
+
+    public static string OnlyNumbers(string input)
+    {
+        Regex onlyNumbers = new(@"\D", RegexOptions.Compiled);
+
+        return onlyNumbers.Replace(input, String.Empty);
     }
 }
