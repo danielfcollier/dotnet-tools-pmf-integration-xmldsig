@@ -49,7 +49,7 @@ public class Producer
         List<InvoiceRequest.ItemServico> itensServico = InvoiceService.GetItensServico(partner, customer);
         var (baseCalculo, valorIssqn, valorTotalServicos) = InvoiceService.GetTotals(itensServico);
 
-        Address address = await AddressService.Get(customer.PostalCode);
+        Address address = await AddressService.Get(customer.PostalCode, partner.Municipal.FallbackAddress);
 
         InvoiceRequest result = new()
         {
@@ -69,13 +69,13 @@ public class Producer
             IdentificacaoTomador = UtilsHandler.MaskPersonDocument(customer.DocumentId),
             //
             PaisTomador = address.CountryCode,
-            CodigoMunicipioTomador = address.MunicipalCode,
+            CodigoMunicipioTomador = Int32.Parse(address.MunicipalCode),
             LogradouroTomador = address.Street,
             NumeroEnderecoTomador = "s/n",
             BairroTomador = address.Neighborhood,
-            CodigoPostalTomador = address.PostalCode,
+            CodigoPostalTomador = UtilsHandler.OnlyNumbers(address.PostalCode),
             UfTomador = address.State,
-            Cfps = CityCodesService.GetCfps(address.MunicipalCode),
+            Cfps = CityCodesService.GetCfps(Int32.Parse(address.MunicipalCode)),
         };
 
         return result;

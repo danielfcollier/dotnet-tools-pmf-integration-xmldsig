@@ -22,6 +22,9 @@ public class Partner
     {
         [JsonPropertyName("numeroAedf")]
         public string NumeroAedf { get; init; }
+
+        [JsonPropertyName("fallbackAddress")]
+        public Address FallbackAddress { get; init; }
     }
 
     public class Service
