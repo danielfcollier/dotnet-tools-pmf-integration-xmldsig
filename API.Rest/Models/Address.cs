@@ -6,21 +6,21 @@ namespace Models;
 
 public class Address
 {
-    [JsonPropertyName("postalCode")]
+    [JsonPropertyName("cep")]
     public string PostalCode { get; set; }
 
-    [JsonPropertyName("street")]
+    [JsonPropertyName("logradouro")]
     public string Street { get; set; }
 
-    [JsonPropertyName("neighborhood")]
+    [JsonPropertyName("bairro")]
     public string Neighborhood { get; set; }
 
-    [JsonPropertyName("state")]
+    [JsonPropertyName("uf")]
     public string State { get; set; }
 
-    [JsonPropertyName("municipalCode")]
-    public int MunicipalCode { get; set; }
+    [JsonPropertyName("ibge")]
+    public string MunicipalCode { get; set; }
 
     [JsonPropertyName("countryCode")]
-    public int CountryCode { get; set; }
+    public int CountryCode { get; set; } = 1058; // BRAZIL COUNTRY CODE
 }
