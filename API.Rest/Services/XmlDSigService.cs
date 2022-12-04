@@ -1,17 +1,23 @@
 using System.Xml;
-using System.Text.Json;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using System.Security.Cryptography.X509Certificates;
 
-using Models;
 using Handlers;
+using Models;
 
 namespace Services;
 
-public static class XmlDSigService
+public class XmlDSigService
 {
-    public static XmlDocument XmlDSig(XmlDocument payload, X509Certificate2 certificate)
+    private readonly X509Certificate2 certificate;
+
+    public XmlDSigService(Credentials credentials)
+    {
+        certificate = GetCertificate(credentials);
+    }
+
+    public XmlDocument XmlDSig(XmlDocument payload)
     {
         XmlDocument result = (XmlDocument)payload.CloneNode(true);
 
@@ -38,7 +44,7 @@ public static class XmlDSigService
         return result;
     }
 
-    public static bool IsValidXmlDSig(XmlDocument xml, X509Certificate2 certificate)
+    public bool IsValidXmlDSig(XmlDocument xml)
     {
         bool isValid;
         SignedXml signedXml = new(xml);
@@ -61,26 +67,18 @@ public static class XmlDSigService
         return isValid;
     }
 
-    public static async Task<Credentials> GetCredentials(string partnerId)
-    {
-        // TODO: get credentials from secure location
-
-        string templatePath = Path.Join(".");
-        string? credentials = await FileHandler.ReadAsync("secrets.json", templatePath);
-
-        if (credentials is not null)
-        {
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            return JsonSerializer.Deserialize<Credentials>(credentials, options)!;
-        }
-
-        return new Credentials();
-    }
-
-    public static X509Certificate2 GetCertificate(Credentials credentials)
+    public X509Certificate2 GetCertificate(Credentials credentials)
     {
         byte[] bytes = Convert.FromBase64String(credentials.Certificate.Data);
 
         return new X509Certificate2(bytes, credentials.Certificate.Password);
+    }
+
+    public XmlDocument SignInvoice(object invoice)
+    {
+        XmlDocument xmlInvoice = XmlHandler.SerializeObjectToXmlDocument(invoice);
+        XmlDocument signedInvoice = XmlDSig(xmlInvoice);
+
+        return signedInvoice;
     }
 }
