@@ -187,7 +187,7 @@ public static class StringsHandler
         return str;
     }
 
-    public static string DecodeBase64(string encoded)
+    public static string DecodeBase64WithAccents(string encoded)
     {
         byte[] data = Convert.FromBase64String(encoded);
         string encodedUrl = Encoding.UTF8.GetString(data);
