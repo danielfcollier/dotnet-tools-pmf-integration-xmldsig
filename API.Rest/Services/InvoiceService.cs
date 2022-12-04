@@ -76,13 +76,13 @@ public class InvoiceService
         string endpoint = "api/v1/autenticacao/oauth/token";
 
         Dictionary<string, string> queryParams = new()
-            {
-                { "grant_type", "password" },
-                { "username", credentials.Login.User },
-                { "password", encryptedPassword },
-                { "client_id", credentials.Credential.ClientId },
-                { "client_secret", credentials.Credential.ClientSecret }
-            };
+        {
+            { "grant_type", "password" },
+            { "username", credentials.Login.User },
+            { "password", encryptedPassword },
+            { "client_id", credentials.Credential.ClientId },
+            { "client_secret", credentials.Credential.ClientSecret }
+        };
         string queryString = HttpService.GetQueryString(queryParams);
 
         Dictionary<string, string> headers = new()
