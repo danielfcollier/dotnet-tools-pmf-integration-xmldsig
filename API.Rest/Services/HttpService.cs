@@ -24,23 +24,23 @@ public static class HttpService
         return client;
     }
 
-    public static async Task<(JsonElement, HttpStatusCode)> GetRequest(
+    public static async Task<(T?, HttpStatusCode)> GetRequest<T>(
         Uri uri,
         Dictionary<string, string>? headers,
         object? data
-    ) => await JsonRequest(uri, HttpMethod.Get, headers, data);
+    ) => await JsonRequest<T>(uri, HttpMethod.Get, headers, data);
 
-    public static async Task<(JsonElement, HttpStatusCode)> PostRequest(
+    public static async Task<(T?, HttpStatusCode)> PostRequest<T>(
         Uri uri,
         Dictionary<string, string>? headers,
         object? data
-    ) => await JsonRequest(uri, HttpMethod.Post, headers, data);
+    ) => await JsonRequest<T>(uri, HttpMethod.Post, headers, data);
 
-    public static async Task<(JsonElement, HttpStatusCode)> PostText(
+    public static async Task<(T?, HttpStatusCode)> PostText<T>(
         Uri uri,
         Dictionary<string, string>? headers,
         string? data
-    ) => await TextRequest(uri, HttpMethod.Post, headers, data);
+    ) => await TextRequest<T>(uri, HttpMethod.Post, headers, data);
 
     public static async Task<(string?, HttpStatusCode)> PostXml(
         Uri uri,
@@ -61,7 +61,7 @@ public static class HttpService
         return queryString;
     }
 
-    private static async Task<(JsonElement, HttpStatusCode)> JsonRequest(
+    private static async Task<(T?, HttpStatusCode)> JsonRequest<T>(
         Uri uri,
         HttpMethod method,
         Dictionary<string, string>? headers,
@@ -72,9 +72,9 @@ public static class HttpService
         HttpResponseMessage? response = await _client.SendAsync(request);
 
         string? result = await response.Content.ReadAsStringAsync();
-        JsonElement output = JsonSerializer.Deserialize<JsonElement>(result);
+        T? output = JsonSerializer.Deserialize<T>(result);
 
-        return (output, response.StatusCode);
+        return (output, response?.StatusCode ?? HttpStatusCode.BadRequest);
     }
 
 
@@ -97,7 +97,7 @@ public static class HttpService
         return request;
     }
 
-    private static async Task<(JsonElement, HttpStatusCode)> TextRequest(
+    private static async Task<(T?, HttpStatusCode)> TextRequest<T>(
         Uri uri,
         HttpMethod method,
         Dictionary<string, string>? headers,
@@ -105,12 +105,13 @@ public static class HttpService
     )
     {
         HttpRequestMessage request = BuildTextRequest(uri, method, headers, data);
+        Console.WriteLine(await request.Content!.ReadAsStringAsync());
         HttpResponseMessage? response = await _client.SendAsync(request);
 
         string? result = await response.Content.ReadAsStringAsync();
-        JsonElement output = JsonSerializer.Deserialize<JsonElement>(result);
+        T? output = JsonSerializer.Deserialize<T>(result);
 
-        return (output, response.StatusCode);
+        return (output, response?.StatusCode ?? HttpStatusCode.BadRequest);
     }
 
     private static HttpRequestMessage BuildTextRequest(
@@ -132,7 +133,7 @@ public static class HttpService
         return request;
     }
 
-    private static async Task<(string, HttpStatusCode)> XmlRequest(
+    private static async Task<(string?, HttpStatusCode)> XmlRequest(
         Uri uri,
         HttpMethod method,
         Dictionary<string, string>? headers,
@@ -144,7 +145,7 @@ public static class HttpService
 
         string? result = await response.Content.ReadAsStringAsync();
 
-        return (result, response.StatusCode);
+        return (result, response?.StatusCode ?? HttpStatusCode.BadRequest);
     }
 
     private static HttpRequestMessage BuildXmlRequest(

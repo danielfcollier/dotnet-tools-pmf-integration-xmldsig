@@ -13,16 +13,16 @@ public static class CSVHandler
         IgnoreBlankLines = true,
     };
 
-    public static List<Customer> Read(string filepath)
+    public static List<T> Read<T>(string filepath)
     {
-        List<Customer> customers = new();
+        List<T> data = new();
 
         using (StreamReader streamReader = new(filepath))
         using (CsvReader csvReader = new(streamReader, config))
         {
-            customers = csvReader.GetRecords<Customer>().ToList();
+            data = csvReader.GetRecords<T>().ToList();
         }
 
-        return customers;
+        return data;
     }
 }
