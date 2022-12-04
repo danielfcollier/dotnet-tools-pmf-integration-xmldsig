@@ -17,7 +17,7 @@ public static class AddressService
 
         (Address? response, HttpStatusCode statusCode) = await HttpService.GetRequest<Address>(uri, null, null);
 
-        if (response is null || statusCode != HttpStatusCode.OK || response.Street is null || response.Street == String.Empty)
+        if (response is null || statusCode != HttpStatusCode.OK || string.IsNullOrWhiteSpace(response.Street))
         {
             return fallbackAddress;
         }
