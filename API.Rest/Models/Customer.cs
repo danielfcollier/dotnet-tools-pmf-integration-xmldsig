@@ -1,5 +1,8 @@
 #nullable disable
 
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 using System.Text.Json.Serialization;
 
 namespace Models;
@@ -7,6 +10,7 @@ namespace Models;
 public class Customer
 {
     // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    [Required]
     [JsonPropertyName("id")]
     public string Id { get; init; }
 
@@ -40,6 +44,7 @@ public class Customer
     [JsonPropertyName("Service")]
     public string Services { get; init; }
 
+    [DefaultValue(false)]
     [JsonPropertyName("isSent")]
     public string IsSent { get; init; }
 
