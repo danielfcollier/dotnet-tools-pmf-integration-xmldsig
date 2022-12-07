@@ -2,13 +2,19 @@
 
 Requirements: .NET SDK 6.0
 
+Documentation: /swagger
+
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-7.0
+
+API: /api
+
 ## Table of Contents
 
-- [Demo Version](#demo-version)
 - [Build and Run](#build-and-run)
 - [Run Tests](#run-tests)
 - [CI-CD](#ci-cd)
-- [Configurations](#configurations)
+- [Basic Architecture](#basic-architecture)
+- [OpenAPI Documentation](#openapi-documentation)
 - [References](#references)
 
 ## Demo Version
@@ -43,8 +49,8 @@ make deploy
 ### With Docker:
 
 ```bash
-docker build -t api-rest .
-docker run -p 4000:4000 api-rest
+docker build -t uservice-municipal-integration .
+docker run -p 4000:4000 uservice-municipal-integration
 ```
 
 ## Run Tests
