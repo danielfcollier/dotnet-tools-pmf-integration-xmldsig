@@ -9,6 +9,9 @@ public class Partner
     [JsonPropertyName("id")]
     public string Id { get; init; }
 
+    [JsonPropertyName("additionalData")]
+    public AdditionalData Additional { get; init; }
+
     [JsonPropertyName("municipalData")]
     public MunicipalData Municipal { get; init; }
 
@@ -17,6 +20,15 @@ public class Partner
 
     [JsonPropertyName("secrets")]
     public PartnerCredentials Secrets { get; init; }
+
+    public class AdditionalData
+    {
+        [JsonPropertyName("message")]
+        public string Message { get; init; }
+
+        [JsonPropertyName("taxes")]
+        public string Taxes { get; init; }
+    }
 
     public class MunicipalData
     {
@@ -32,7 +44,7 @@ public class Partner
         [JsonPropertyName("id")]
         public int Id { get; init; }
 
-        [JsonPropertyName("idCNAE")]
+        [JsonPropertyName("idCnae")]
         public int IdCnae { get; init; }
 
         [JsonPropertyName("cst")]

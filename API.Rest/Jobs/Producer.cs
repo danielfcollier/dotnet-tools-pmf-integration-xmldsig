@@ -19,7 +19,7 @@ public class Producer
         signer = new XmlDSigService(partner.Secrets);
     }
 
-    public async Task<List<(XmlDocument, string)>> GetPayloadToProcess()
+    public async Task<List<(XmlDocument, string)>> GetPayloadsToProcess()
     {
         var results = new List<(XmlDocument, string)>();
 
@@ -54,7 +54,7 @@ public class Producer
         InvoiceRequest result = new()
         {
             // Identificacao = "#0001", // TODO: string 10 chars
-            NumeroAedf = partner.Municipal.NumeroAedf,
+            NumeroAedf = Globals.IS_PROD ? partner.Municipal.NumeroAedf : partner.Secrets.Login.User.Remove(partner.Secrets.Login.User.Length - 1, 1),
             DataEmissao = UtilsHandler.MaskDate(customer.EffectiveDate),
             //
             ItensServico = itensServico,
@@ -62,16 +62,16 @@ public class Producer
             BaseCalculo = baseCalculo,
             ValorIssqn = valorIssqn,
             ValorTotalServicos = valorTotalServicos,
-            // DadosAdicionais = MountAdditionalData(), // TODO
+            DadosAdicionais = MountAdditionalData(), // TODO
             //
             RazaoSocialTomador = customer.FullName,
-            EmailTomador = customer.Email,
+            EmailTomador = Globals.IS_PROD ? customer.Email : partner.Secrets.Email,
             IdentificacaoTomador = UtilsHandler.MaskPersonDocument(customer.DocumentId),
             //
             PaisTomador = address.CountryCode,
             CodigoMunicipioTomador = Int32.Parse(address.MunicipalCode),
             LogradouroTomador = address.Street,
-            NumeroEnderecoTomador = "s/n",
+            NumeroEnderecoTomador = "-",
             BairroTomador = address.Neighborhood,
             CodigoPostalTomador = UtilsHandler.OnlyNumbers(address.PostalCode),
             UfTomador = address.State,
@@ -83,8 +83,6 @@ public class Producer
 
     private string MountAdditionalData()
     {
-        string additionalData = $"Valor Aprox. dos Trib. de acordo Lei 12.741/12 Federal R$ 171,20 (13,45%) - Estadual R$ 0 0,00 - Municipal R$ 48,75 (3.83%)";
-
-        return String.Empty;
+        return partner.Additional.Message;
     }
 }

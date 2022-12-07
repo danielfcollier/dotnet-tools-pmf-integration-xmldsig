@@ -6,6 +6,9 @@ namespace Models;
 
 public class PartnerCredentials
 {
+    [JsonPropertyName("email")]
+    public string Email { get; init; }
+
     [JsonPropertyName("certificate")]
     public CertificateSignature Certificate { get; init; }
     

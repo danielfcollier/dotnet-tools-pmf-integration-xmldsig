@@ -115,7 +115,6 @@ public static class HttpService
     )
     {
         HttpRequestMessage request = BuildTextRequest(uri, method, headers, data);
-        Console.WriteLine(await request.Content!.ReadAsStringAsync());
         HttpResponseMessage? response = await _client.SendAsync(request);
 
         string? result = await response.Content.ReadAsStringAsync();

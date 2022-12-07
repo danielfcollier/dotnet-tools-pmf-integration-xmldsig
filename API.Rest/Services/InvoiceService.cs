@@ -16,16 +16,18 @@ public class InvoiceService
 
     public InvoiceService(Partner partner)
     {
-        bool IS_PROD = false;
-
         credentials = partner.Secrets;
         encryptedPassword = CryptoHandler.Md5Converter(partner.Secrets.Login.Password)!;
-        BASE_URL = IS_PROD ? "https://nfps-e.pmf.sc.gov.br" : "https://nfps-e-hml.pmf.sc.gov.br";
+        BASE_URL = Globals.IS_PROD ? "https://nfps-e.pmf.sc.gov.br" : "https://nfps-e-hml.pmf.sc.gov.br";
     }
 
     public async Task<(string?, HttpStatusCode)> Request(XmlDocument signedInvoice)
     {
         oAuth2Token = await RefreshToken();
+        if (oAuth2Token is null)
+        {
+            throw new Exception("OAuth2Token can not be null!");
+        }
 
         string endpoint = "api/v1/processamento/notas/processa";
         Dictionary<string, string> headers = new()
@@ -42,6 +44,10 @@ public class InvoiceService
     public async Task<(string?, HttpStatusCode)> Cancel(XmlDocument signedRequest)
     {
         oAuth2Token = await RefreshToken();
+        if (oAuth2Token is null)
+        {
+            throw new Exception("OAuth2Token can not be null!");
+        }
 
         string endpoint = "api/v1/cancelamento/notas/cancela";
         Dictionary<string, string> headers = new()
@@ -50,13 +56,18 @@ public class InvoiceService
             { "Token", oAuth2Token.Token },
         };
         Uri uri = new($"{BASE_URL}/{endpoint}");
+        var response = await HttpService.PostXml(uri, headers, signedRequest);
 
-        return await HttpService.PostXml(uri, headers, signedRequest);
+        return response;
     }
 
     public async Task<(string?, HttpStatusCode)> Validate(XmlDocument signedInvoice)
     {
         oAuth2Token = await RefreshToken();
+        if (oAuth2Token is null)
+        {
+            throw new Exception("OAuth2Token can not be null!");
+        }
 
         string endpoint = "api/v1/processamento/notas/valida-processamento";
         Dictionary<string, string> headers = new()
@@ -65,11 +76,12 @@ public class InvoiceService
             { "Token", oAuth2Token.Token },
         };
         Uri uri = new($"{BASE_URL}/{endpoint}");
+        var response = await HttpService.PostXml(uri, headers, signedInvoice);
 
-        return await HttpService.PostXml(uri, headers, signedInvoice);
+        return response;
     }
 
-    public async Task<OAuth2Token> RefreshToken()
+    public async Task<OAuth2Token?> RefreshToken()
     {
         // TODO: rule to only request a new token if the current token is invalid
 
@@ -96,9 +108,9 @@ public class InvoiceService
 
         (OAuth2Token? response, HttpStatusCode statusCode) = await HttpService.PostText<OAuth2Token>(uri, headers, queryString);
 
-        if (response is null)
+        if (statusCode != HttpStatusCode.OK)
         {
-            throw new Exception("OAuth2Token can not be null!");
+            throw new Exception($"OAuthToken Invalid! ### HttpStatusCode: ${statusCode} ### ${response.ErrorDescription}");
         }
 
         return response;
