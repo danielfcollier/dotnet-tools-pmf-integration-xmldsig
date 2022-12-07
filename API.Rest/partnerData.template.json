@@ -1,0 +1,48 @@
+{
+  "id": "",
+  "additionalData": {
+    "message": "",
+    "taxes": ""
+  },
+  "municipalData": {
+    "numeroAedf": "",
+    "fallbackAddress": {
+      "cep": "",
+      "logradouro": "",
+      "bairro": "",
+      "localidade": "",
+      "uf": "",
+      "ibge": ""
+    }
+  },
+  "services": [
+    {
+      "id": 1,
+      "idCnae": 9139,
+      "cst": 1,
+      "baseCalculoFactor": 0,
+      "aliquota": 0,
+      "description": "",
+      "taxes": {
+        "state": 0,
+        "federal": 0
+      }
+    }
+  ],
+  "secrets": {
+    "email": "",
+    "certificate": {
+      "validity": "",
+      "password": "",
+      "data": ""
+    },
+    "login": {
+      "user": "",
+      "password": ""
+    },
+    "credential": {
+      "client-id": "",
+      "client-secret": ""
+    }
+  }
+}
