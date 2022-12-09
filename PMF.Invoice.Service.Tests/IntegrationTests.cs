@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using Models;
 
-namespace Minimal.API.Rest.Tests;
+namespace Minimal.PMF.Invoice.Service.Tests;
 
 public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
