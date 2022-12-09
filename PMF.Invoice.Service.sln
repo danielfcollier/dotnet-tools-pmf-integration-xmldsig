@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMF.Invoice.Service", "PMF.Invoice.Service\PMF.Invoice.Service.csproj", "{C4AE2193-B3BD-4D55-9DB0-3F3C50FF3D78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMF.Invoice.Service.Tests", "PMF.Invoice.Service.Tests\PMF.Invoice.Service.Tests.csproj", "{46C42C9C-42BB-4D30-A2C8-B004235277FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4AE2193-B3BD-4D55-9DB0-3F3C50FF3D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4AE2193-B3BD-4D55-9DB0-3F3C50FF3D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4AE2193-B3BD-4D55-9DB0-3F3C50FF3D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4AE2193-B3BD-4D55-9DB0-3F3C50FF3D78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46C42C9C-42BB-4D30-A2C8-B004235277FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46C42C9C-42BB-4D30-A2C8-B004235277FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46C42C9C-42BB-4D30-A2C8-B004235277FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46C42C9C-42BB-4D30-A2C8-B004235277FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

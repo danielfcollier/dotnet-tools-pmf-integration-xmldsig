@@ -9,9 +9,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/API.Rest/bin/Debug/net6.0/API.Rest.dll",
+      "program": "${workspaceFolder}/PMF.Invoice.Service/bin/Debug/net6.0/PMF.Invoice.Service.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/API.Rest",
+      "cwd": "${workspaceFolder}/PMF.Invoice.Service",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
