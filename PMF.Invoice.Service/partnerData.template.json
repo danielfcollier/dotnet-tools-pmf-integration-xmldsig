@@ -1,11 +1,14 @@
 {
   "id": "",
   "additionalData": {
-    "message": "",
-    "taxes": ""
+    "message": "additional info to be included in the invoice",
+    "taxes": {
+      "federal": "to be implemented",
+      "state": "to be implemented"
+    }
   },
   "municipalData": {
-    "numeroAedf": "",
+    "numeroAedf": "invoice serial number",
     "fallbackAddress": {
       "cep": "",
       "logradouro": "",
@@ -30,19 +33,19 @@
     }
   ],
   "secrets": {
-    "email": "",
+    "email": "your email at PMF",
     "certificate": {
-      "validity": "",
-      "password": "",
-      "data": ""
+      "validity": "just for control purposes",
+      "password": "certificate text plain password",
+      "data": "certificate file converted do base64"
     },
     "login": {
-      "user": "",
-      "password": ""
+      "user": "company CMC",
+      "password": "password to access PMF portal"
     },
     "credential": {
-      "client-id": "",
-      "client-secret": ""
+      "client-id": "PMF client-id",
+      "client-secret": "PMF client-secret"
     }
   }
 }

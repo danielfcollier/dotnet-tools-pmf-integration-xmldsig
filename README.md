@@ -1,42 +1,18 @@
-# REST API App
+# PMF Invoice Integration Service
 
 Requirements: .NET SDK 6.0
-
-Documentation: /swagger
-
-https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-7.0
-
-API: /api
 
 ## Table of Contents
 
 - [Build and Run](#build-and-run)
 - [Run Tests](#run-tests)
 - [CI-CD](#ci-cd)
-- [Basic Architecture](#basic-architecture)
-- [OpenAPI Documentation](#openapi-documentation)
 - [References](#references)
 
-## Demo Version
-
-Run locally with `ngrok`:
-
-```bash
-make tunnel
-```
-
-## Build and Run the App
-
-### Locally:
+## Build and Run
 
 ```bash
 make build
-make run
-```
-
-### Development:
-
-```bash
 make run
 ```
 
@@ -49,8 +25,8 @@ make deploy
 ### With Docker:
 
 ```bash
-docker build -t uservice-municipal-integration .
-docker run -p 4000:4000 uservice-municipal-integration
+docker build -t tools-pmf-invoices .
+docker run -p 4000:4000 tools-pmf-invoices
 ```
 
 ## Run Tests
@@ -79,19 +55,7 @@ If tests are passing, the CI with GitHub Actions pushes the changes to a product
 
 ### Base template created with:
 
-```bash
-dotnet new webapi -o API.Rest
-```
-
-https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-6.0&tabs=visual-studio
-
-https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-6.0
-
 https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test
-
-### Ngrok
-
-https://ngrok.com
 
 ### Base dockerfile created with:
 

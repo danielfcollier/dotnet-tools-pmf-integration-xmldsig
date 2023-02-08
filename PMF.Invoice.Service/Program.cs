@@ -103,5 +103,8 @@ public partial class Program
             // xmlResponse.Load(response);
             // InvoiceResponse result = XmlHandler.DeserializeResponse<InvoiceResponse>(xmlResponse);
         }
+
+        // 6) End
+        Console.WriteLine("### DONE!!!");
     }
 }
