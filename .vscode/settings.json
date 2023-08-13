@@ -43,5 +43,6 @@
     "Trib",
     "Unitario",
     "valida"
-  ]
+  ],
+  "dotnet.defaultSolution": "PMF.Invoice.Service.sln"
 }
