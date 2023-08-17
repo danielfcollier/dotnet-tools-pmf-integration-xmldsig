@@ -10,7 +10,7 @@ public static class DBHandler
     {
         try
         {
-            string filepath = Path.Join(".", "partnerData.json");
+            string filepath = Path.Join(".", "Db", "partnersData.json");
             Partner? partner = await JsonHandler.ReadAll<Partner>(filepath);
 
             return partner;
@@ -18,7 +18,6 @@ public static class DBHandler
         catch (Exception error)
         {
             Console.WriteLine(error.Message);
-
         }
 
         return null;
