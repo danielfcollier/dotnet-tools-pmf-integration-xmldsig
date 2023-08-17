@@ -1,14 +1,12 @@
-
-
+using System.Net;
 using System.Xml;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-using Microsoft.OpenApi.Models;
-
 using CommandLine;
-using Jobs;
+using Handlers;
+using Services;
 using Models;
 
 public partial class Program
@@ -17,6 +15,15 @@ public partial class Program
     {
         [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
         public bool Verbose { get; set; }
+
+        [Option('i', "id", Required = false, HelpText = "Partner Id.")]
+        public string Partner { get; set; }
+
+        [Option('f', "inputFile", Required = false, HelpText = "Input file.")]
+        public string InputFile { get; set; }
+        
+        [Option('o', "outputFile", Required = false, HelpText = "Output file.")]
+        public string OutputFile { get; set; }
     }
 
     private static async Task Main(string[] args)
@@ -38,6 +45,11 @@ public partial class Program
             HandleParseError(errors);
             return;
         }
+
+        // TODO: remove default parameters
+        options.Partner = "#0001";
+        options.InputFile = Path.Join(".", "Db", "data.csv");
+        options.OutputFile = Path.Join(".", "Db", "output.csv");
         
         await RunOptionsAndReturnExitCode(options);
     }
@@ -66,45 +78,102 @@ public partial class Program
         }
     }
 
+    // Main Program
     private static async Task RunOptionsAndReturnExitCode(ArgOptions options)
     {
-        string partnerId = "#0001";
-
-        // TODO: 1) Authentication (JWT)
-
-        // 2) Get Partner Data
+        /*
+        CLI: partnerId inputFile [outputFile]
+        Logs: for whom is processing, what is processing, status
+        */
+        string partnerId = options.Partner;
         Partner? partner = await DBHandler.GetPartnerData(partnerId);
+        
         if (partner is null)
         {
-            return;
+            return; // TODO: throw Exception
         }
 
-        // 3) Start Jobs
-        Producer producer = new(partner);
-        Consumer consumer = new(partner);
+        // Start
+        Console.WriteLine($"Processing for partner {partnerId}");
 
-        // 4) Produce Payload
-        List<(XmlDocument, string)> payloads = await producer.GetPayloadsToProcess();
+        // Services
+        XmlDSigService signer = new (partner.Secrets);
+        InvoiceService invoiceService = new(partner);
 
-        // 5) Process Payload
-        foreach (var item in payloads)
+        // Produce
+        List<Invoice> invoices = CSVHandler.Read<Invoice>(options.InputFile);
+        List<Invoice> processedInvoices = new ();
+
+        // Consume
+        foreach (var invoice in invoices)
         {
-            (XmlDocument payload, string payloadId) = item;
+            bool hasBeenSent = false;
 
-            var (response, statusCode) = await consumer.Run(payloadId, payload);
+            if (!invoice.IsSent)
+            {
+                InvoiceRequest request = await invoiceService.MountRequest(invoice);
+                XmlDocument xmlRequest = signer.SignInvoice(request);
 
-            // 6) Save Response
-            // if (statusCode is not HttpStatusCode.OK)
-            // {
+                var (response, statusCode) = await Run(invoiceService, invoice.Id, xmlRequest);
 
-            // }
+                hasBeenSent = statusCode == HttpStatusCode.OK;
+            }
 
-            // XmlDocument xmlResponse = new() { PreserveWhitespace = true };
-            // xmlResponse.Load(response);
-            // InvoiceResponse result = XmlHandler.DeserializeResponse<InvoiceResponse>(xmlResponse);
+            if (!hasBeenSent)
+            {
+                processedInvoices.Add(invoice);
+            }
+            else
+            {
+                Invoice updatedInvoice = new ()
+                {
+                    Id = invoice.Id,
+                    ExternalId = invoice.ExternalId,
+                    PaymentId = invoice.PaymentId,
+                    DocumentId = invoice.DocumentId,
+                    FullName = invoice.FullName,
+                    Birthday = invoice.Birthday, // TODO: remove
+                    Email = invoice.Email,
+                    Cellphone = invoice.Cellphone,
+                    PostalCode = invoice.PostalCode,
+                    ConsultationDate = invoice.ConsultationDate,  // TODO: remove
+                    Description = invoice.Description,  // TODO: remove
+                    ConsultationValue = invoice.ConsultationValue,  // TODO: remove
+                    Services = invoice.Services,
+                    CmcCode = invoice.CmcCode,
+                    VerificationCode = invoice.VerificationCode,
+                    Observation = invoice.Observation,
+                    EffectiveDate = invoice.EffectiveDate,   // TODO: change do ProcessingDate
+                    InvoiceDate = invoice.InvoiceDate,
+                    IsSent = true,
+                };
+                processedInvoices.Add(updatedInvoice);
+            }
         }
 
-        // 6) End
+        CSVHandler.Write<Invoice>(options.OutputFile, processedInvoices);
         Console.WriteLine("### DONE!!!");
+    }
+
+    private static async Task<(string?, HttpStatusCode)> Run(InvoiceService invoiceService, string id, XmlDocument request)
+    {
+        Console.Write($"Processing request: {id}");
+        
+        var (response, statusCode) = await invoiceService.Request(request);
+        var message = statusCode == HttpStatusCode.OK ? "SUCCESS" : "FAILED";
+
+        Console.Write($" - {message}\n");
+        return (response, statusCode);
+    }
+
+    private static async Task<(string?, HttpStatusCode)> Validate(InvoiceService invoiceService, string id, XmlDocument request)
+    {
+        Console.Write($"Validating request: {id}");
+        
+        var (response, statusCode) = await invoiceService.Validate(request);
+        var message = statusCode == HttpStatusCode.OK ? "SUCCESS" : "FAILED";
+
+        Console.Write($" - {message}\n");
+        return (response, statusCode);
     }
 }
