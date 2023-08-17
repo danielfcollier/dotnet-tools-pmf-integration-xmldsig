@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Models;
 
-public class CustomerServices
+public class InvoiceServices
 {
     [JsonPropertyName("id")]
     public int Id { get; init; }

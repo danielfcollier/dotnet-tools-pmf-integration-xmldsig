@@ -10,15 +10,17 @@ namespace Services;
 public class InvoiceService
 {
     private readonly string encryptedPassword;
+    private readonly Partner partner;
     private readonly PartnerCredentials credentials;
     private OAuth2Token? oAuth2Token;
     private readonly string BASE_URL;
 
-    public InvoiceService(Partner partner)
+    public InvoiceService(Partner _partner)
     {
+        partner = _partner;
         credentials = partner.Secrets;
         encryptedPassword = CryptoHandler.Md5Converter(partner.Secrets.Login.Password)!;
-        BASE_URL = Globals.IS_PROD ? "https://nfps-e.pmf.sc.gov.br" : "https://nfps-e-hml.pmf.sc.gov.br";
+        BASE_URL = Configs.IS_PROD ? "https://nfps-e.pmf.sc.gov.br" : "https://nfps-e-hml.pmf.sc.gov.br";
     }
 
     public async Task<(string?, HttpStatusCode)> Request(XmlDocument signedInvoice)
@@ -116,6 +118,48 @@ public class InvoiceService
         return response;
     }
 
+    public async Task<InvoiceRequest> MountRequest(Invoice invoice)
+    {
+        List<InvoiceRequest.ItemServico> itensServico = GetItensServico(partner, invoice);
+        var (baseCalculo, valorIssqn, valorTotalServicos) = GetTotals(itensServico);
+
+        Address address = await AddressService.Get(invoice.PostalCode, partner.Municipal.FallbackAddress);
+
+        InvoiceRequest result = new()
+        {
+            // Identificacao = "#0001", // TODO: string 10 chars
+            NumeroAedf = Configs.IS_PROD ? partner.Municipal.NumeroAedf : partner.Secrets.Login.User.Remove(partner.Secrets.Login.User.Length - 1, 1),
+            DataEmissao = invoice.EffectiveDate,
+            //
+            ItensServico = itensServico,
+            //
+            BaseCalculo = baseCalculo,
+            ValorIssqn = valorIssqn,
+            ValorTotalServicos = valorTotalServicos,
+            DadosAdicionais = MountAdditionalData(), // TODO
+            //
+            RazaoSocialTomador = invoice.FullName,
+            EmailTomador = Configs.IS_PROD ? invoice.Email : partner.Secrets.Email,
+            IdentificacaoTomador = UtilsHandler.MaskDocument(invoice.DocumentId),
+            //
+            PaisTomador = address.CountryCode,
+            CodigoMunicipioTomador = Int32.Parse(address.MunicipalCode),
+            LogradouroTomador = address.Street,
+            NumeroEnderecoTomador = "-",
+            BairroTomador = address.Neighborhood,
+            CodigoPostalTomador = UtilsHandler.OnlyNumbers(address.PostalCode),
+            UfTomador = address.State,
+            Cfps = CityCodesService.GetCfps(Int32.Parse(address.MunicipalCode)),
+        };
+
+        return result;
+    }
+
+    private string MountAdditionalData()
+    {
+        return partner.Additional.Message;
+    }
+
     public static (decimal, decimal, decimal) GetTotals(List<InvoiceRequest.ItemServico> itensServico)
     {
         decimal baseCalculo = itensServico.ToArray().Select(itemServico => itemServico.BaseCalculo).Sum();
@@ -125,15 +169,15 @@ public class InvoiceService
         return (baseCalculo, valorIssqn, valorTotalServicos);
     }
 
-    public static List<InvoiceRequest.ItemServico> GetItensServico(Partner partner, Customer customer)
+    public static List<InvoiceRequest.ItemServico> GetItensServico(Partner partner, Invoice invoice)
     {
         List<InvoiceRequest.ItemServico> itensServico = new();
 
-        string jsonString = StringsHandler.DecodeBase64WithAccents(customer.Services);
-        List<CustomerServices>? services = JsonSerializer.Deserialize<List<CustomerServices>>(jsonString);
+        string jsonString = StringsHandler.DecodeBase64WithAccents(invoice.Services);
+        List<InvoiceServices>? services = JsonSerializer.Deserialize<List<InvoiceServices>>(jsonString);
         if (services is null)
         {
-            throw new Exception("Customer Services array can not be null!");
+            throw new Exception("Invoice Services array can not be null!");
         }
 
         foreach (var service in services)
