@@ -3,7 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-PMF.Invoice.Service/partnerData.json
+PMF.Invoice.Service/Db/
 
 # User-specific files
 *.rsuser
