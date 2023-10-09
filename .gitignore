@@ -4,6 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 PMF.Invoice.Service/Db/
+PMF.Invoice.Service/partnersData.json
 
 # User-specific files
 *.rsuser
