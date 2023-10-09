@@ -47,7 +47,7 @@ public partial class Program
         }
 
         // TODO: remove default parameters
-        options.Partner = "#0001";
+        options.Partner = "#000.001";
         options.InputFile = Path.Join(".", "Db", "data.csv");
         options.OutputFile = Path.Join(".", "Db", "output.csv");
         
@@ -86,12 +86,9 @@ public partial class Program
         Logs: for whom is processing, what is processing, status
         */
         string partnerId = options.Partner;
-        Partner? partner = await DBHandler.GetPartnerData(partnerId);
-        
-        if (partner is null)
-        {
-            return; // TODO: throw Exception
-        }
+        string filepath = Path.Join("partnersData.json");
+        Partner partner = await DBHandler.GetPartnerData(filepath, partnerId);
+
 
         // Start
         Console.WriteLine($"Processing for partner {partnerId}");

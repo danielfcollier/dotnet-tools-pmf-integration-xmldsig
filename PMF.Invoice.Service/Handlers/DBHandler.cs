@@ -1,25 +1,18 @@
-using System.Reflection.Metadata;
-
 using Handlers;
 
 namespace Models;
 
 public static class DBHandler
 {
-    public static async Task<Partner?> GetPartnerData(string partnerId)
+    public static async Task<Partner> GetPartnerData(string filepath, string partnerId)
     {
-        try
-        {
-            string filepath = Path.Join(".", "Db", "partnersData.json");
-            Partner? partner = await JsonHandler.ReadAll<Partner>(filepath);
-
-            return partner;
-        }
-        catch (Exception error)
-        {
-            Console.WriteLine(error.Message);
+        List<Partner>? partners = await JsonHandler.ReadAll<List<Partner>>(filepath);
+        if (partners is null) {
+            throw new Exception("Partners data can not be null!");
         }
 
-        return null;
+        var partner = partners.Where(partner => partner.Id == partnerId).First();
+
+        return partner;
     }
 }
