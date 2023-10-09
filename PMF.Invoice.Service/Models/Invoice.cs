@@ -15,7 +15,7 @@ public class Invoice
     public string Id { get; init; }
 
     [JsonPropertyName("externalId")]
-    public string ExternalId { get; init; }
+    public string? ExternalId { get; init; }
 
     [JsonPropertyName("paymentId")]
     public string PaymentId { get; init; }
@@ -28,7 +28,6 @@ public class Invoice
 
     [JsonPropertyName("birthday")]
     public string Birthday { get; init; }
-
 
     [JsonPropertyName("email")]
     public string Email { get; init; }
@@ -48,14 +47,14 @@ public class Invoice
     [JsonPropertyName("consultationValue")]
     public decimal ConsultationValue { get; init; }
 
-    [JsonPropertyName("service")]
+    [JsonPropertyName("services")]
     public string Services { get; init; }
 
     [JsonPropertyName("cmcCode")]
-    public string CmcCode { get; init; }
+    public string? CmcCode { get; init; }
 
     [JsonPropertyName("verificationCode")]
-    public string VerificationCode { get; init; }
+    public string? VerificationCode { get; init; }
 
     [JsonPropertyName("observation")]
     public string Observation { get; init; }
@@ -64,7 +63,7 @@ public class Invoice
     public string EffectiveDate { get; init; }
     
     [JsonPropertyName("invoiceDate")]
-    public string InvoiceDate { get; init; }
+    public string? InvoiceDate { get; init; }
 
     [DefaultValue(false)]
     [JsonPropertyName("isSent")]
